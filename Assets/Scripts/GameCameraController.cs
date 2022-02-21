@@ -1,25 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+using Cinemachine;
 using UnityEngine;
 
 public class GameCameraController : MonoBehaviour
 {
-    private Vector2 startAxis;
-
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        Camera mainCamera = Camera.main;
-        if (Input.GetKeyDown(KeyCode.Space))
+        var freeLook = GetComponent<CinemachineFreeLook>();
+        if (Input.GetKey(KeyCode.Space))
         {
-            startAxis = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            freeLook.m_XAxis.m_MaxSpeed = 500.0f;
         }
-
-        if (Input.GetKey(KeyCode.Space) && mainCamera)
+        else
         {
-            mainCamera.transform.RotateAround(Vector3.zero, Vector3.up,
-                (Input.GetAxis("Mouse X") - startAxis.x));
+            freeLook.m_XAxis.m_MaxSpeed = 0.0f;
         }
     }
 }
