@@ -43,7 +43,7 @@ jobs:
           path: build/${{ matrix.targetPlatform }}  
   
   release:
-    needs: [buildOSX, buildWindows]
+    needs: build
     name: Release to GitHub 🚀
     runs-on: ubuntu-latest
     if: github.ref == 'refs/tags/release'
