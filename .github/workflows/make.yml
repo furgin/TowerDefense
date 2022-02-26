@@ -2,6 +2,10 @@
 
 on:
   workflow_call:
+    inputs: 
+      version:
+        type: string
+        required: true
     secrets:
       UNITY_LICENSE:
         required: true
@@ -40,7 +44,7 @@ jobs:
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: TowerDefense
-          versioning: Semantic
+          versioning: Custom
       - uses: actions/upload-artifact@v2
         with:
           name: Build-${{ matrix.targetPlatform }}

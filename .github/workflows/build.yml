@@ -4,9 +4,22 @@ on: push
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  SHA: ${GITHUB_SHA:8}
 
 jobs:
+  hash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: hash
+        run: echo "::set-output name=hash::$(git rev-parse --short HEAD)"
+    outputs:
+      hash: ${{steps.hash.outputs.hash}}
+      
   build:
+    needs: hash
     uses: ./.github/workflows/make.yml
+    with:
+      version: ${{ needs.hash.outputs.hash }}
     secrets:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}

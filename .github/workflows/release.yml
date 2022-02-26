@@ -7,73 +7,42 @@ env:
 
 jobs:
   build:
-    name: Build for ${{ matrix.targetPlatform }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - StandaloneWindows64
-          - StandaloneOSX
-    outputs:
-      buildVersion: ${{ steps.build.outputs.buildVersion }}
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          lfs: true
-      - uses: actions/cache@v2
-        with:
-          path: Library
-          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-${{ matrix.targetPlatform }}-
-            Library-
-      - uses: game-ci/unity-builder@v2
-        id: build
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          targetPlatform: ${{ matrix.targetPlatform }}
-          buildName: TowerDefense
-          versioning: Semantic
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}  
+    uses: ./.github/workflows/make.yml
+    secrets:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   
-  release:
-    needs: build
-    name: Release to GitHub 🚀
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/release'
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Download Windows Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: Build-StandaloneWindows64
-          path: build/StandaloneWindows64
-      - name: Download OSX Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: Build-StandaloneOSX
-          path: build/StandaloneOSX
-      - uses: papeloto/action-zip@v1
-        with:
-          files: build/StandaloneWindows64/
-          dest: TowerDefenseWindows.zip
-      - uses: papeloto/action-zip@v1
-        with:
-          files: build/StandaloneOSX/
-          dest: TowerDefenseOSX.zip
-      - name: Release 🚀
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "*.zip"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: Release ${{needs.build.outputs.buildVersion}}
-          tag: ${{needs.build.outputs.buildVersion}}
+#  release:
+#    needs: build
+#    name: Release to GitHub 🚀
+#    runs-on: ubuntu-latest
+#    if: github.ref == 'refs/heads/release'
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v2
+#        with:
+#          fetch-depth: 0
+#      - name: Download Windows Artifact
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: Build-StandaloneWindows64
+#          path: build/StandaloneWindows64
+#      - name: Download OSX Artifact
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: Build-StandaloneOSX
+#          path: build/StandaloneOSX
+#      - uses: papeloto/action-zip@v1
+#        with:
+#          files: build/StandaloneWindows64/
+#          dest: TowerDefenseWindows.zip
+#      - uses: papeloto/action-zip@v1
+#        with:
+#          files: build/StandaloneOSX/
+#          dest: TowerDefenseOSX.zip
+#      - name: Release 🚀
+#        uses: ncipollo/release-action@v1
+#        with:
+#          artifacts: "*.zip"
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          name: Release ${{needs.build.outputs.buildVersion}}
+#          tag: ${{needs.build.outputs.buildVersion}}
