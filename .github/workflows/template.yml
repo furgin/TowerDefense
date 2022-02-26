@@ -14,8 +14,8 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneWindows64
-#          - StandaloneLinux64
-#          - StandaloneOSX
+          - StandaloneLinux64
+          - StandaloneOSX
     outputs:
       buildVersion: ${{ steps.build.outputs.buildVersion }}
     steps:
