@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4465934, g: 0.49642956, b: 0.5748249, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -189,7 +189,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 427726594}
-  m_LocalRotation: {x: 0.2821125, y: 0.00073659944, z: -0.0002166021, w: 0.95938104}
+  m_LocalRotation: {x: 0.28211254, y: 0.00069275964, z: -0.0002037107, w: 0.95938104}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -815,7 +815,7 @@ MonoBehaviour:
   m_YAxis:
     Value: 0.5
     m_SpeedMode: 0
-    m_MaxSpeed: 20
+    m_MaxSpeed: 200
     m_AccelTime: 0.2
     m_DecelTime: 0.1
     m_InputAxisName: Mouse ScrollWheel
@@ -984,7 +984,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.2821125, y: 0.0007365984, z: -0.00021659848, w: 0.959381}
+  m_LocalRotation: {x: 0.28211257, y: 0.00069275947, z: -0.00020370995, w: 0.9593811}
   m_LocalPosition: {x: 0, y: 13, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

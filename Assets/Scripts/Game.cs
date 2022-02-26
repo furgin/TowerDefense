@@ -58,12 +58,14 @@ public class Game : MonoBehaviour {
             SpawnEnemy();
         }
         enemies.GameUpdate();
+        Physics.SyncTransforms();
+        board.GameUpdate();
     }
     
     void SpawnEnemy () {
         GameTile spawnPoint =
             board.GetSpawnPoint(Random.Range(0, board.SpawnPointCount));
-        Debug.Log("Spawn: " + spawnPoint.transform.localPosition);
+        // Debug.Log("Spawn: " + spawnPoint.transform.localPosition);
         Enemy enemy = enemyFactory.Get();
         enemy.SpawnOn(spawnPoint);
         enemies.Add(enemy);
@@ -84,7 +86,12 @@ public class Game : MonoBehaviour {
     void HandleTouch () {
         GameTile tile = board.GetTile(TouchRay);
         if (tile != null) {
-            board.ToggleWall(tile);
+            if (Input.GetKey(KeyCode.LeftShift)) {
+                board.ToggleTower(tile);
+            }
+            else {
+                board.ToggleWall(tile);
+            }
         }
     }
 }
