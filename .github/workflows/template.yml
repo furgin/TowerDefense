@@ -46,7 +46,7 @@ jobs:
     needs: build
     name: Release to GitHub 🚀
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/branches/release'
+    if: github.ref == 'refs/heads/release'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
