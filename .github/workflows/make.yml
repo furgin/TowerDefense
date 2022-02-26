@@ -1,6 +1,10 @@
 ﻿name: Make 🎮
 
-on: workflow_call
+on:
+  workflow_call:
+    secrets:
+      UNITY_LICENSE:
+        required: true
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}

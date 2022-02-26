@@ -8,3 +8,5 @@ env:
 jobs:
   build:
     uses: ./.github/workflows/make.yml
+    secrets:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
