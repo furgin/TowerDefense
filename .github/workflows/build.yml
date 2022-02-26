@@ -7,4 +7,4 @@ env:
 
 jobs:
   build:
-    uses: ./github/workflows/make.yml
+    uses: ./.github/workflows/make.yml
