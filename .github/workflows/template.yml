@@ -68,8 +68,10 @@ jobs:
         with:
           name: Build-StandaloneOSX
           path: build/StandaloneOSX
-
       - name: Release 🚀
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          name: ${{needs.build.outputs.buildVersion}}
+          artifacts: "*.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Release ${{needs.build.outputs.buildVersion}}
+          tag: ${{needs.build.outputs.buildVersion}}
