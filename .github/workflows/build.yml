@@ -1,0 +1,10 @@
+﻿name: Build 🎮
+
+on: push
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  build:
+    uses: ./github/workflows/make.yml
