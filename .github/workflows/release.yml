@@ -1,4 +1,4 @@
-﻿name: GameCI Template 🎮
+﻿name: Build TowerDefense 🎮
 
 on: push
 
@@ -14,7 +14,7 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneWindows64
-          - StandaloneLinux64
+#          - StandaloneLinux64
           - StandaloneOSX
     outputs:
       buildVersion: ${{ steps.build.outputs.buildVersion }}
@@ -53,21 +53,33 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Download StandaloneWindows64 Artifact
+      - name: Download Windows Artifact
         uses: actions/download-artifact@v2
         with:
           name: Build-StandaloneWindows64
           path: build/StandaloneWindows64
-      - name: Download StandaloneLinux64 Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: Build-StandaloneLinux64
-          path: build/StandaloneLinux64
-      - name: Download StandaloneOSX Artifact
+#      - name: Download StandaloneLinux64 Artifact
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: Build-StandaloneLinux64
+#          path: build/StandaloneLinux64
+      - name: Download OSX Artifact
         uses: actions/download-artifact@v2
         with:
           name: Build-StandaloneOSX
           path: build/StandaloneOSX
+      - uses: papeloto/action-zip@v1
+        with:
+          files: build/StandaloneWindows64/
+          dest: TowerDefenseWindows.zip
+      - uses: papeloto/action-zip@v1
+        with:
+          files: build/StandaloneOSX/
+          dest: TowerDefenseOSX.zip
+#      - uses: papeloto/action-zip@v1
+#        with:
+#          files: build/StandaloneLinux64/
+#          dest: TowerDefense.zip
       - name: Release 🚀
         uses: ncipollo/release-action@v1
         with:
