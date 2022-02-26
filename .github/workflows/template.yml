@@ -14,8 +14,8 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneWindows64
-          - StandaloneLinux64
-          - StandaloneOSX
+#          - StandaloneLinux64
+#          - StandaloneOSX
     outputs:
       buildVersion: ${{ steps.build.outputs.buildVersion }}
     steps:
@@ -36,6 +36,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: TowerDefense
           versioning: Semantic
       - uses: actions/upload-artifact@v2
         with:
@@ -71,4 +72,4 @@ jobs:
       - name: Release 🚀
         uses: softprops/action-gh-release@v1
         with:
-          files: Release.txt
+          name: ${{needs.build.outputs.buildVersion}}
