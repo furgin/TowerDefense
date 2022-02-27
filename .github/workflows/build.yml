@@ -25,6 +25,9 @@ jobs:
         uses: "WyriHaximus/github-action-next-semvers@v1"
         with:
           version: ${{ steps.previoustag.outputs.tag }}
+      - name: Info
+        run: |
+          echo ${{ steps.semvers.outputs["patch"] }}
     outputs:
       version: ${{ steps.semvers.outputs.patch }}-${{ steps.hash.outputs.hash }}
       
