@@ -6,26 +6,11 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
-  # Generate the next patch version from the latest tag
   version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: 'Get Previous tag'
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
-        with:
-          fallback: 0.0.0
-      - name: 'Get next version'
-        id: semvers
-        uses: "WyriHaximus/github-action-next-semvers@v1"
-        with:
-          version: ${{ steps.previoustag.outputs.tag }}
-    outputs:
-      version: ${{ steps.semvers.outputs.patch }}
-  
+    uses: ./.github/workflows/versioner.yml
+    with:
+      type: patch
+      
   build:
     needs: version
     uses: ./.github/workflows/builder.yml
@@ -37,67 +22,6 @@ jobs:
   release:
     needs: [version, build]
     name: Create Release 🚀
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Tag Repository
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: ${{ needs.version.outputs.version }}
-          
-      - name: Download Windows Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: Build-StandaloneWindows64
-          path: build/StandaloneWindows64
-          
-      - name: Download OSX Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: Build-StandaloneOSX
-          path: build/StandaloneOSX
-
-      - name: Download Linux Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: Build-StandaloneLinux64
-          path: build/StandaloneLinux64
-          
-
-      - name: Create Windows Zip 📁
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          directory: build/StandaloneWindows64/
-          filename: ../../towerdefense-win64-${{ needs.version.outputs.version }}.zip
-          
-      - name: Create OSX Zip 📁
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          directory: build/StandaloneOSX/
-          filename: ../../towerdefense-osx-${{ needs.version.outputs.version }}.zip
-          
-      - name: Create Linux tarball 📁
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'tar'
-          directory: build/StandaloneLinux64/
-          filename: ../../towerdefense-linux-${{ needs.version.outputs.version }}.tar.gz
-          
-      - name: Info
-        run: ls -al
-         
-      - name: Release 🚀
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "*.zip, *.tar.gz"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+    uses: ./.github/workflows/releaser.yml
+    with:
+      version: ${{ needs.version.outputs.version }}
