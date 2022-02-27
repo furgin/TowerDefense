@@ -1,0 +1,69 @@
+name: Patch Release 💨
+
+on: workflow_dispatch
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  # Generate the next patch version from the latest tag
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 0.0.0
+      - name: 'Get next version'
+        id: semvers
+        uses: "WyriHaximus/github-action-next-semvers@v1"
+        with:
+          version: ${{ steps.previoustag.outputs.tag }}
+    outputs:
+      version: ${{ steps.semvers.outputs.patch }}
+  
+  build:
+    uses: ./.github/workflows/make.yml
+    secrets:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+    with:
+      version: ${{ needs.version.outputs.version }}
+  
+  release:
+    needs: build
+    name: Create Release 🚀
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: Build-StandaloneWindows64
+          path: build/StandaloneWindows64
+      - name: Download OSX Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: Build-StandaloneOSX
+          path: build/StandaloneOSX
+      - uses: papeloto/action-zip@v1
+        with:
+          files: build/StandaloneWindows64/
+          dest: TowerDefenseWindows-${{ needs.version.outputs.version }}.zip
+      - uses: papeloto/action-zip@v1
+        with:
+          files: build/StandaloneOSX/
+          dest: TowerDefenseOSX-${{ needs.version.outputs.version }}.zip
+      - name: Release 🚀
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "*.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Release ${{ needs.version.outputs.version }}
+          tag: ${{ needs.version.outputs.version }}
