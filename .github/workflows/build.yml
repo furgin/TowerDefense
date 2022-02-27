@@ -30,7 +30,7 @@ jobs:
       
   build:
     needs: version
-    uses: ./.github/workflows/builder.yml
+    uses: ./.github/actions/builder.yml
     with:
       version: ${{ needs.version.outputs.version }}
     secrets:
