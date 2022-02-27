@@ -49,24 +49,24 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ needs.version.outputs.version }}
-#      - name: Download Windows Artifact
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: Build-StandaloneWindows64
-#          path: build/StandaloneWindows64
-#      - name: Download OSX Artifact
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: Build-StandaloneOSX
-#          path: build/StandaloneOSX
-#      - uses: papeloto/action-zip@v1
-#        with:
-#          files: build/StandaloneWindows64/
-#          dest: TowerDefenseWindows-${{ needs.version.outputs.version }}.zip
-#      - uses: papeloto/action-zip@v1
-#        with:
-#          files: build/StandaloneOSX/
-#          dest: TowerDefenseOSX-${{ needs.version.outputs.version }}.zip
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: Build-StandaloneWindows64
+          path: build/StandaloneWindows64
+      - name: Download OSX Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: Build-StandaloneOSX
+          path: build/StandaloneOSX
+      - uses: papeloto/action-zip@v1
+        with:
+          files: build/StandaloneWindows64/
+          dest: TowerDefenseWindows-${{ needs.version.outputs.version }}.zip
+      - uses: papeloto/action-zip@v1
+        with:
+          files: build/StandaloneOSX/
+          dest: TowerDefenseOSX-${{ needs.version.outputs.version }}.zip
       - name: Release 🚀
         uses: ncipollo/release-action@v1
         with:
