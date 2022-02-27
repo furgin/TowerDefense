@@ -1,4 +1,4 @@
-﻿name: Make 🎮
+﻿name: Builder
 
 on:
   workflow_call:

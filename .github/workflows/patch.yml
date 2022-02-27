@@ -1,4 +1,4 @@
-name: Patch Release 💨
+name: Release - Patch x.x.1
 
 on: workflow_dispatch
 
@@ -85,13 +85,13 @@ jobs:
           filename: towerdefense-osx-${{ needs.version.outputs.version }}.zip
           exclusions: towerdefense-osx-${{ needs.version.outputs.version }}.zip
           
-      - name: Create Linux tarball 📁
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'tar'
-          directory: build/StandaloneLinux64/
-          filename: towerdefense-linux-${{ needs.version.outputs.version }}.tar.gz
-          exclusions: towerdefense-linux-${{ needs.version.outputs.version }}.tar.gz
+#      - name: Create Linux tarball 📁
+#        uses: thedoctor0/zip-release@master
+#        with:
+#          type: 'tar'
+#          directory: build/StandaloneLinux64/
+#          filename: towerdefense-linux-${{ needs.version.outputs.version }}.tar.gz
+#          exclusions: towerdefense-linux-${{ needs.version.outputs.version }}.tar.gz
          
       - name: Release 🚀
         uses: ncipollo/release-action@v1
