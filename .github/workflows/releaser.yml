@@ -1,4 +1,4 @@
-name: Reusable Releaser
+name: Reusable - Releaser
 
 on:
   workflow_call:

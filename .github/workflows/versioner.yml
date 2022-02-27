@@ -1,4 +1,4 @@
-﻿name: Versioner
+﻿name: Reusable - Versioner
 
 on:
   workflow_call:
@@ -43,7 +43,7 @@ jobs:
           fi
           if [ "${{ inputs.type }}" == "major" ]; then
             echo "::set-output name=version::${{ steps.semvers.outputs.major }}";
-          fi          
+          fi 
     outputs:
       version: ${{ steps.version.outputs.version }}
       
