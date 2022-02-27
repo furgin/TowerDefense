@@ -1,3 +1,5 @@
+name: Reusable Releaser
+
 on:
   workflow_call:
     inputs:
@@ -11,7 +13,7 @@ env:
 jobs:
  
   release:
-    needs: [version, build]
+#    needs: [version, build]
     name: Create Release 🚀
     runs-on: ubuntu-latest
     steps:
