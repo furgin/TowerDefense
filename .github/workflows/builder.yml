@@ -23,6 +23,7 @@ jobs:
         targetPlatform:
           - StandaloneWindows64
           - StandaloneOSX
+          - StandaloneLinux64
     outputs:
       buildVersion: ${{ steps.build.outputs.buildVersion }}
     steps:

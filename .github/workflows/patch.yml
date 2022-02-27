@@ -49,24 +49,47 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ needs.version.outputs.version }}
+          
       - name: Download Windows Artifact
         uses: actions/download-artifact@v2
         with:
           name: Build-StandaloneWindows64
           path: build/StandaloneWindows64
+          
       - name: Download OSX Artifact
         uses: actions/download-artifact@v2
         with:
           name: Build-StandaloneOSX
           path: build/StandaloneOSX
-      - uses: papeloto/action-zip@v1
+
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v2
         with:
-          files: build/StandaloneWindows64/
-          dest: TowerDefenseWindows-${{ needs.version.outputs.version }}.zip
-      - uses: papeloto/action-zip@v1
+          name: Build-StandaloneLinux64
+          path: build/StandaloneLinux64
+          
+
+      - name: Create Windows Zip 📁
+        uses: thedoctor0/zip-release@master
         with:
-          files: build/StandaloneOSX/
-          dest: TowerDefenseOSX-${{ needs.version.outputs.version }}.zip
+          type: 'zip'
+          path: build/StandaloneWindows64/
+          filename: towerdefense-win-${{ needs.version.outputs.version }}.zip
+
+      - name: Create OSX Zip 📁
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          path: build/StandaloneOSX/
+          filename: towerdefense-osx-${{ needs.version.outputs.version }}.zip
+          
+      - name: Create Linux tarball 📁
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'tar'
+          path: build/StandaloneLinux64/
+          filename: towerdefense-linux-${{ needs.version.outputs.version }}.tar.gz          
+         
       - name: Release 🚀
         uses: ncipollo/release-action@v1
         with:
