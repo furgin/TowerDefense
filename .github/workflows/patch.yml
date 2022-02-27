@@ -73,21 +73,21 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          path: build/StandaloneWindows64/
+          directory: build/StandaloneWindows64/
           filename: towerdefense-win64-${{ needs.version.outputs.version }}.zip
 
       - name: Create OSX Zip 📁
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          path: build/StandaloneOSX/
+          directory: build/StandaloneOSX/
           filename: towerdefense-osx-${{ needs.version.outputs.version }}.zip
           
       - name: Create Linux tarball 📁
         uses: thedoctor0/zip-release@master
         with:
           type: 'tar'
-          path: build/StandaloneLinux64/
+          directory: build/StandaloneLinux64/
           filename: towerdefense-linux-${{ needs.version.outputs.version }}.tar.gz          
          
       - name: Release 🚀
