@@ -28,7 +28,7 @@ jobs:
   
   build:
     needs: version
-    uses: ./.github/workflows/make.yml
+    uses: ./.github/workflows/builder.yml
     secrets:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
     with:
