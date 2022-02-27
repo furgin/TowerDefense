@@ -6,6 +6,9 @@ on:
       type:
         type: string
         required: true
+    outputs:
+      version:
+        value: ${{ jobs.version.outputs.version }}
 
 jobs:
   version:
@@ -31,7 +34,6 @@ jobs:
           if [ "${{ inputs.type }}" == "dev" ]; then
             echo "::set-output name=hash::${{ steps.semvers.outputs.patch }}-$(git rev-parse --short HEAD)";
           fi
-            
     outputs:
       version: ${{ steps.version.outputs.version }}
       
