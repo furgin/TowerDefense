@@ -1,4 +1,4 @@
-name: Release - Patch
+name: Releaser
 
 on:
   workflow_call:
