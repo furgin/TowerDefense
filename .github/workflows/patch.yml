@@ -35,7 +35,7 @@ jobs:
       version: ${{ needs.version.outputs.version }}
   
   release:
-    needs: build
+    needs: [version, build]
     name: Create Release 🚀
     runs-on: ubuntu-latest
     steps:
