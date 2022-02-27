@@ -7,19 +7,29 @@ env:
   SHA: ${GITHUB_SHA:8}
 
 jobs:
-  hash:
+  version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - id: hash
         run: echo "::set-output name=hash::$(git rev-parse --short HEAD)"
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 0.0.0
+      - name: 'Get next version'
+        id: semvers
+        uses: "WyriHaximus/github-action-next-semvers@v1"
+        with:
+          version: ${{ steps.previoustag.outputs.tag }}
     outputs:
-      hash: ${{steps.hash.outputs.hash}}
+      version: ${{ steps.semvers.outputs.patch }}-${{ steps.hash.outputs.hash }}
       
   build:
-    needs: hash
+    needs: version
     uses: ./.github/workflows/make.yml
     with:
-      version: ${{ needs.hash.outputs.hash }}
+      version: ${{ needs.version.outputs.version }}
     secrets:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
