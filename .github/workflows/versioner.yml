@@ -38,6 +38,12 @@ jobs:
           if [ "${{ inputs.type }}" == "patch" ]; then
             echo "::set-output name=version::${{ steps.semvers.outputs.patch }}";
           fi
+          if [ "${{ inputs.type }}" == "minor" ]; then
+            echo "::set-output name=version::${{ steps.semvers.outputs.minor }}";
+          fi
+          if [ "${{ inputs.type }}" == "major" ]; then
+            echo "::set-output name=version::${{ steps.semvers.outputs.major }}";
+          fi          
     outputs:
       version: ${{ steps.version.outputs.version }}
       
