@@ -31,8 +31,9 @@ jobs:
         run: echo "::set-output name=hash::$(git rev-parse --short HEAD)"
       - id: version
         run: |
+          echo Version Type: ${{ inputs.type }}
           if [ "${{ inputs.type }}" == "dev" ]; then
-            echo "::set-output name=hash::${{ steps.semvers.outputs.patch }}-$(git rev-parse --short HEAD)";
+            echo "::set-output name=version::${{ steps.semvers.outputs.patch }}-$(git rev-parse --short HEAD)";
           fi
     outputs:
       version: ${{ steps.version.outputs.version }}
