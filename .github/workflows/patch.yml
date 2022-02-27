@@ -74,7 +74,7 @@ jobs:
         with:
           type: 'zip'
           path: build/StandaloneWindows64/
-          filename: towerdefense-win-${{ needs.version.outputs.version }}.zip
+          filename: towerdefense-win64-${{ needs.version.outputs.version }}.zip
 
       - name: Create OSX Zip 📁
         uses: thedoctor0/zip-release@master
