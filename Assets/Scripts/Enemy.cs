@@ -46,7 +46,7 @@ public class Enemy : GameBehavior
     public override bool GameUpdate()
     {
         if (Health <= 0f) {
-            OriginFactory.Reclaim(this);
+            Recycle();
             return false;
         }
         
@@ -55,7 +55,8 @@ public class Enemy : GameBehavior
         {
             if (tileTo == null)
             {
-                OriginFactory.Reclaim(this);
+                Game.EnemyReachedDestination();
+                Recycle();
                 return false;
             }
 
@@ -78,6 +79,10 @@ public class Enemy : GameBehavior
             transform.localRotation = Quaternion.Euler(0f, angle, 0f);
         }
         return true;
+    }
+    
+    public override void Recycle () {
+        OriginFactory.Reclaim(this);
     }
 
     void PrepareNextState()
@@ -162,9 +167,9 @@ public class Enemy : GameBehavior
         progressFactor = 2f * speed;
     }
 
-    public void Initialize (float scale, float speed, float pathOffset) {
+    public void Initialize (float scale, float speed, float pathOffset, float health) {
         Scale = scale;
-        Health = 100f * scale;
+        Health = health;
         model.localScale = new Vector3(scale, scale, scale);
         this.speed = speed;
         this.pathOffset = pathOffset;
