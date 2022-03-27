@@ -16,3 +16,4 @@ MonoBehaviour:
   cycleSpeedUp: 1
   waves:
   - {fileID: 11400000, guid: bdd5272dffcd543e5a07bbd8cd724304, type: 2}
+  StartingPlayerHealth: 5

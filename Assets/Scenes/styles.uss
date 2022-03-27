@@ -1,0 +1,104 @@
+.button-style {
+    height: 103px;
+    width: 454px;
+    font-size: 48px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: rgb(0, 113, 180);
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: rgb(255, 255, 255);
+}
+
+.button-style:hover {
+    height: 103px;
+    width: 454px;
+    font-size: 48px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: rgb(0, 59, 94);
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.button-style:active {
+    height: 103px;
+    width: 454px;
+    font-size: 48px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: rgb(0, 0, 0);
+}
+
+.menu-style {
+    height: 489px;
+    width: 597px;
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.tool-button {
+    height: 80px;
+    width: 80px;
+    background-color: rgba(188, 188, 188, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    padding: 0px;
+    margin: 0;
+    border-radius: 20px;
+}
+
+.selected {
+    background-color: rgb(217, 0, 0);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.heart {
+    -unity-background-image-tint-color: rgb(255, 0, 0);
+    background-image: url("/Assets/Materials/hearts.png");
+    width: 80px;
+    height: 80px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.wrapper {
+    padding: 20px;
+    height: 120px;
+}

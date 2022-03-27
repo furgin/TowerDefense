@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Game : MonoBehaviour
 {
@@ -12,12 +14,14 @@ public class Game : MonoBehaviour
 
     [SerializeField, Range(1f, 10f)] float playSpeed = 1f;
 
+    [SerializeField] GameController gameController = default;
+
     GameBehaviorCollection enemies = new GameBehaviorCollection();
     GameBehaviorCollection nonEnemies = new GameBehaviorCollection();
 
     Ray TouchRay => Camera.main.ScreenPointToRay(Input.mousePosition);
 
-    private TowerType selectedTowerType = TowerType.Laser;
+    private Tool selectedTool = Tool.Laser;
 
     static Game instance;
 
@@ -25,10 +29,9 @@ public class Game : MonoBehaviour
 
     GameScenario.State activeScenario;
 
-    [SerializeField, Range(0, 100)] int startingPlayerHealth = 10;
-    int playerHealth;
-
     const float pausedTimeScale = 0f;
+    private bool paused = false;
+    private Player player;
 
     public static Shell SpawnShell()
     {
@@ -51,11 +54,12 @@ public class Game : MonoBehaviour
 
     void Awake()
     {
-        playerHealth = startingPlayerHealth;
+        player = new Player();
         board.Initialize(boardSize, tileContentFactory);
         board.ShowPaths = false;
         board.ShowGrid = true;
         activeScenario = scenario.Begin();
+        player.health = scenario.StartingPlayerHealth;
     }
 
     void OnValidate()
@@ -71,15 +75,48 @@ public class Game : MonoBehaviour
         }
     }
 
+    int GetKeys(params KeyCode[] keys)
+    {
+        for (int i = 0; i < keys.Length; i++)
+        {
+            if (Input.GetKeyDown(keys[i]))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        gameController.Select(selectedTool);
+        gameController.GameUpdate(player);
+
+        if (!paused)
         {
-            HandleTouch();
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            HandleAlternativeTouch();
+            if (Input.GetMouseButtonDown(0))
+            {
+                HandleTouch();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                HandleAlternativeTouch();
+            }
+
+            int key = GetKeys(
+                KeyCode.Alpha1,
+                KeyCode.Alpha2,
+                KeyCode.Alpha3,
+                KeyCode.Alpha4,
+                KeyCode.Alpha5,
+                KeyCode.Alpha6,
+                KeyCode.Alpha7,
+                KeyCode.Alpha8,
+                KeyCode.Alpha9);
+            if (Enum.IsDefined(typeof(Tool),key))
+            {
+                selectedTool = (Tool) key;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.V))
@@ -92,31 +129,16 @@ public class Game : MonoBehaviour
             board.ShowGrid = !board.ShowGrid;
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            selectedTowerType = TowerType.Laser;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            selectedTowerType = TowerType.Mortar;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Time.timeScale =
-                Time.timeScale > pausedTimeScale ? pausedTimeScale : playSpeed;
+            SetPause(true);
         }
         else if (Time.timeScale > pausedTimeScale)
         {
-            Time.timeScale = playSpeed;
+            SetPause(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            BeginNewGame();
-        }
-
-        if (playerHealth <= 0 && startingPlayerHealth > 0)
+        if (player.health <= 0 && scenario.StartingPlayerHealth > 0)
         {
             Debug.Log("Defeat!");
             BeginNewGame();
@@ -135,18 +157,36 @@ public class Game : MonoBehaviour
         nonEnemies.GameUpdate();
     }
 
-    public static void EnemyReachedDestination()
+    private void SetPause(bool paused)
     {
-        instance.playerHealth -= 1;
+        if (paused)
+        {
+            if (!this.paused) gameController.ShowMenu();
+            Time.timeScale =
+                Time.timeScale > pausedTimeScale ? pausedTimeScale : playSpeed;
+            this.paused = true;
+        }
+        else
+        {
+            gameController.HideMenu();
+            Time.timeScale = playSpeed;
+            this.paused = false;
+        }
     }
 
-    void BeginNewGame()
+    public static void EnemyReachedDestination()
     {
-        playerHealth = startingPlayerHealth;
+        instance.player.health -= 1;
+    }
+
+    public void BeginNewGame()
+    {
+        player.health = scenario.StartingPlayerHealth;
         enemies.Clear();
         nonEnemies.Clear();
         board.Clear();
         activeScenario = scenario.Begin();
+        SetPause(false);
     }
 
     public static void SpawnEnemy(EnemyFactory factory, EnemyType type)
@@ -180,13 +220,20 @@ public class Game : MonoBehaviour
         GameTile tile = board.GetTile(TouchRay);
         if (tile != null)
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            switch (selectedTool)
             {
-                board.ToggleTower(tile, selectedTowerType);
-            }
-            else
-            {
-                board.ToggleWall(tile);
+                case Tool.Laser:
+                    board.BuildTower(tile, TowerType.Laser);
+                    break;
+                case Tool.Mortar:
+                    board.BuildTower(tile, TowerType.Mortar);
+                    break;       
+                case Tool.Wall:
+                    board.BuildWall(tile);
+                    break;      
+                case Tool.Trash:
+                    board.Trash(tile);
+                    break;       
             }
         }
     }

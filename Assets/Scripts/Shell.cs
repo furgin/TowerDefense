@@ -15,7 +15,6 @@ public class Shell : WarEntity
     }
     
     public override bool GameUpdate () {
-        Debug.Log("Shell GameUpdate");
         age += Time.deltaTime;
         Vector3 p = launchPoint + launchVelocity * age;
         p.y -= 0.5f * 9.81f * age * age;
@@ -32,7 +31,6 @@ public class Shell : WarEntity
         d.y -= 9.81f * age;
         transform.localRotation = Quaternion.LookRotation(d);
         Game.SpawnExplosion().Initialize(p, 0.1f);
-
         return true;
     }
     

@@ -242,4 +242,36 @@ public class GameBoard : MonoBehaviour
             updatingContent.Add(tile.Content);
         }
     }
+    
+    public void BuildTower (GameTile tile, TowerType towerType) {
+        if (tile.Content.Type == GameTileContentType.Empty) {
+            tile.Content = contentFactory.Get(towerType);
+            if (FindPaths()) {
+                updatingContent.Add(tile.Content);
+            }
+            else {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+        }
+    }
+    
+    public void BuildWall (GameTile tile) {
+        if (tile.Content.Type == GameTileContentType.Empty) {
+            tile.Content = contentFactory.Get(GameTileContentType.Wall);
+            if (!FindPaths()) {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+        }
+    }
+
+    public void Trash(GameTile tile)
+    {
+        if (tile.Content.Type == GameTileContentType.Tower) {
+            updatingContent.Remove(tile.Content);
+        }
+        tile.Content = contentFactory.Get(GameTileContentType.Empty);
+        FindPaths();
+    }
 }

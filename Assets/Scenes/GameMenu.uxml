@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="styles.uss" />
+    <ui:VisualElement name="Toolbar" style="height: 120px; position: absolute; flex-direction: row; padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px;">
+        <ui:VisualElement name="laser-tool" class="wrapper">
+            <ui:Button display-tooltip-when-elided="true" class="tool-button" style="background-image: url(&apos;/Assets/Materials/turret-selected.png&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="mortar-tool" class="wrapper">
+            <ui:Button display-tooltip-when-elided="true" class="tool-button" style="background-image: url(&apos;/Assets/Materials/mortar-selected.png&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="wall-tool" class="wrapper">
+            <ui:Button display-tooltip-when-elided="true" class="tool-button" style="background-image: url(&apos;/Assets/Materials/defensive-wall.png&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="trash-tool" class="wrapper">
+            <ui:Button display-tooltip-when-elided="true" class="tool-button" style="background-image: url(&apos;/Assets/Materials/trash-can.png&apos;);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="pause-screen" style="flex-grow: 1; justify-content: space-around; align-items: center; background-color: rgba(0, 0, 0, 0.49);">
+        <ui:VisualElement name="pause-menu" class="menu-style">
+            <ui:Label text="Paused" display-tooltip-when-elided="true" style="font-size: 48px; position: absolute; top: 20px;" />
+            <ui:VisualElement style="-unity-text-align: middle-left; justify-content: flex-start; position: relative; bottom: auto;">
+                <ui:Button text="Restart" display-tooltip-when-elided="true" name="restart-button" class="button-style" style="justify-content: flex-start;" />
+                <ui:Button text="Exit" display-tooltip-when-elided="true" name="exit-button" class="button-style" style="justify-content: flex-start;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="Info" style="height: 120px; position: absolute; flex-direction: row; padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; bottom: 0; width: 100%;">
+        <ui:VisualElement name="hearts" style="flex-direction: row;" />
+        <ui:VisualElement name="power" />
+    </ui:VisualElement>
+</ui:UXML>
