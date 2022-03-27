@@ -3,4 +3,5 @@
     public int health;
     public int money;
     public int power;
+    public int maxPower;
 }

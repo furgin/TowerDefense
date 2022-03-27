@@ -14,8 +14,8 @@ public class GameController : MonoBehaviour
     public VisualTreeAsset heartReference;
 
     Button exitButton;
-    private Button restartButton;
-    private VisualElement mortarTool, wallTool, trashTool, pauseScreen, hearts, laserTool;
+    private Button restartButton, powerIcon;
+    private VisualElement mortarTool, wallTool, trashTool, pauseScreen, hearts, laserTool, level;
 
     [SerializeField] public Game game;
 
@@ -35,6 +35,8 @@ public class GameController : MonoBehaviour
         mortarTool = root.Q<VisualElement>("mortar-tool");
         wallTool = root.Q<VisualElement>("wall-tool");
         trashTool = root.Q<VisualElement>("trash-tool");
+        level = root.Q<VisualElement>("level");
+        powerIcon = root.Q<Button>("power-icon");
 
         hearts = root.Q<VisualElement>("hearts");
     }
@@ -110,5 +112,30 @@ public class GameController : MonoBehaviour
                 hearts.RemoveAt(0);
             }
         }
+
+        var perc = player.power * 100f / player.maxPower;
+        level.RemoveFromClassList("info");
+        level.RemoveFromClassList("warning");
+        level.RemoveFromClassList("error");
+        powerIcon.RemoveFromClassList("info");
+        powerIcon.RemoveFromClassList("warning");
+        powerIcon.RemoveFromClassList("error");
+        if (perc < 33)
+        {
+            level.AddToClassList("error");
+            powerIcon.AddToClassList("error");
+        }
+        else if (perc < 66)
+        {
+            level.AddToClassList("warning");
+            powerIcon.AddToClassList("warning");
+        }
+        else
+        {
+            level.AddToClassList("info");   
+            powerIcon.AddToClassList("info");   
+        }
+
+        level.style.width = new Length(perc, LengthUnit.Percent);
     }
 }

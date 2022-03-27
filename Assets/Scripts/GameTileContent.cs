@@ -26,4 +26,13 @@ public class GameTileContent : MonoBehaviour {
     }
     
     public virtual void GameUpdate () {}
+
+    public virtual bool CanBuild(Player player)
+    {
+        return true;
+    }
+
+    public virtual void Build(Player player) { }
+
+    public virtual void Trash(Player player) { }
 }

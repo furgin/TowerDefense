@@ -24,7 +24,12 @@
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="Info" style="height: 120px; position: absolute; flex-direction: row; padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; bottom: 0; width: 100%;">
-        <ui:VisualElement name="hearts" style="flex-direction: row;" />
-        <ui:VisualElement name="power" />
+        <ui:VisualElement name="hearts" class="info-panel" />
+        <ui:VisualElement name="power" class="info-panel" style="justify-content: flex-end;">
+            <ui:Button name="power-icon" class="power-icon warning" />
+            <ui:VisualElement class="power">
+                <ui:VisualElement name="level" class="level warning" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

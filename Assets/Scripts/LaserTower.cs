@@ -10,6 +10,7 @@ public class LaserTower : Tower
     Vector3 laserBeamScale;
     
     public override TowerType TowerType => TowerType.Laser;
+    public static int Power => 1;
 
     void Awake () {
         laserBeamScale = laserBeam.localScale;
@@ -39,5 +40,19 @@ public class LaserTower : Tower
         
         target.Enemy.ApplyDamage(damagePerSecond * Time.deltaTime);
     }
-    
+
+    public override bool CanBuild(Player player)
+    {
+        return player.power >= Power;
+    }
+
+    public override void Build(Player player)
+    {
+        player.power -= Power;
+    }
+
+    public override void Trash(Player player)
+    {
+        player.power += Power;
+    }
 }

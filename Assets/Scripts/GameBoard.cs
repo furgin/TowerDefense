@@ -6,7 +6,7 @@ public class GameBoard : MonoBehaviour
     [SerializeField] Transform ground = default;
     [SerializeField] GameTile tilePrefab = default;
     [SerializeField] Texture2D gridTexture = default;
-    
+
     GameTileContentFactory contentFactory;
     Queue<GameTile> searchFrontier = new Queue<GameTile>();
     List<GameTile> spawnPoints = new List<GameTile>();
@@ -14,51 +14,64 @@ public class GameBoard : MonoBehaviour
     Vector2Int size;
     GameTile[] tiles;
     private bool showPaths = false, showGrid = false;
-    
-    public bool ShowPaths {
+
+    public bool ShowPaths
+    {
         get => showPaths;
-        set {
+        set
+        {
             showPaths = value;
-            if (showPaths) {
-                foreach (GameTile tile in tiles) {
+            if (showPaths)
+            {
+                foreach (GameTile tile in tiles)
+                {
                     tile.ShowPath();
                 }
             }
-            else {
-                foreach (GameTile tile in tiles) {
+            else
+            {
+                foreach (GameTile tile in tiles)
+                {
                     tile.HidePath();
                 }
             }
         }
     }
-    
-    public bool ShowGrid {
+
+    public bool ShowGrid
+    {
         get => showGrid;
-        set {
+        set
+        {
             showGrid = value;
             Material m = ground.GetComponent<MeshRenderer>().material;
-            if (showGrid) {
+            if (showGrid)
+            {
                 m.mainTexture = gridTexture;
                 m.SetTextureScale("_MainTex", size);
             }
-            else {
+            else
+            {
                 m.mainTexture = null;
             }
         }
     }
-    
+
     public int SpawnPointCount => spawnPoints.Count;
 
-    public void GameUpdate () {
-        for (int i = 0; i < updatingContent.Count; i++) {
+    public void GameUpdate()
+    {
+        for (int i = 0; i < updatingContent.Count; i++)
+        {
             updatingContent[i].GameUpdate();
         }
     }
-    
-    public GameTile GetSpawnPoint (int index) {
+
+    public GameTile GetSpawnPoint(int index)
+    {
         return spawnPoints[index];
     }
-    
+
     public void Initialize(Vector2Int size, GameTileContentFactory contentFactory)
     {
         this.size = size;
@@ -80,7 +93,8 @@ public class GameBoard : MonoBehaviour
                     x - offset.x, 0f, y - offset.y
                 );
                 tile.IsAlternative = (x & 1) == 0;
-                if ((y & 1) == 0) {
+                if ((y & 1) == 0)
+                {
                     tile.IsAlternative = !tile.IsAlternative;
                 }
 
@@ -98,11 +112,14 @@ public class GameBoard : MonoBehaviour
 
         Clear();
     }
-    
-    public void Clear () {
-        foreach (GameTile tile in tiles) {
+
+    public void Clear()
+    {
+        foreach (GameTile tile in tiles)
+        {
             tile.Content = contentFactory.Get(GameTileContentType.Empty);
         }
+
         spawnPoints.Clear();
         updatingContent.Clear();
         ToggleDestination(tiles[tiles.Length / 2]);
@@ -111,17 +128,21 @@ public class GameBoard : MonoBehaviour
 
     public bool FindPaths()
     {
-        foreach (GameTile tile in tiles) {
-            if (tile.Content.Type == GameTileContentType.Destination) {
+        foreach (GameTile tile in tiles)
+        {
+            if (tile.Content.Type == GameTileContentType.Destination)
+            {
                 tile.BecomeDestination();
                 searchFrontier.Enqueue(tile);
             }
-            else {
+            else
+            {
                 tile.ClearPath();
             }
         }
-        
-        if (searchFrontier.Count == 0) {
+
+        if (searchFrontier.Count == 0)
+        {
             return false;
         }
 
@@ -130,13 +151,15 @@ public class GameBoard : MonoBehaviour
             GameTile tile = searchFrontier.Dequeue();
             if (tile != null)
             {
-                if (tile.IsAlternative) {
+                if (tile.IsAlternative)
+                {
                     searchFrontier.Enqueue(tile.GrowPathNorth());
                     searchFrontier.Enqueue(tile.GrowPathSouth());
                     searchFrontier.Enqueue(tile.GrowPathEast());
                     searchFrontier.Enqueue(tile.GrowPathWest());
                 }
-                else {
+                else
+                {
                     searchFrontier.Enqueue(tile.GrowPathWest());
                     searchFrontier.Enqueue(tile.GrowPathEast());
                     searchFrontier.Enqueue(tile.GrowPathSouth());
@@ -144,9 +167,11 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
-        
-        foreach (GameTile tile in tiles) {
-            if (!tile.HasPath) {
+
+        foreach (GameTile tile in tiles)
+        {
+            if (!tile.HasPath)
+            {
                 return false;
             }
         }
@@ -161,117 +186,156 @@ public class GameBoard : MonoBehaviour
 
         return true;
     }
-    
-    public GameTile GetTile (Ray ray) {
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, 1)) {
-            int x = (int)(hit.point.x + size.x * 0.5f);
-            int y = (int)(hit.point.z + size.y * 0.5f);
-            if (x >= 0 && x < size.x && y >= 0 && y < size.y) {
+
+    public GameTile GetTile(Ray ray)
+    {
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, 1))
+        {
+            int x = (int) (hit.point.x + size.x * 0.5f);
+            int y = (int) (hit.point.z + size.y * 0.5f);
+            if (x >= 0 && x < size.x && y >= 0 && y < size.y)
+            {
                 return tiles[x + y * size.x];
             }
         }
+
         return null;
     }
-    
-    public void ToggleDestination (GameTile tile) {
-        if (tile.Content.Type == GameTileContentType.Destination) {
+
+    public void ToggleDestination(GameTile tile)
+    {
+        if (tile.Content.Type == GameTileContentType.Destination)
+        {
             tile.Content = contentFactory.Get(GameTileContentType.Empty);
-            if (!FindPaths()) {
+            if (!FindPaths())
+            {
                 tile.Content =
                     contentFactory.Get(GameTileContentType.Destination);
                 FindPaths();
             }
         }
-        else if (tile.Content.Type == GameTileContentType.Empty) {
+        else if (tile.Content.Type == GameTileContentType.Empty)
+        {
             tile.Content = contentFactory.Get(GameTileContentType.Destination);
             FindPaths();
         }
     }
-    
-    public void ToggleWall (GameTile tile) {
-        if (tile.Content.Type == GameTileContentType.Wall) {
+
+    public void ToggleWall(GameTile tile)
+    {
+        if (tile.Content.Type == GameTileContentType.Wall)
+        {
             tile.Content = contentFactory.Get(GameTileContentType.Empty);
             FindPaths();
         }
-        else if (tile.Content.Type == GameTileContentType.Empty) {
+        else if (tile.Content.Type == GameTileContentType.Empty)
+        {
             tile.Content = contentFactory.Get(GameTileContentType.Wall);
-            if (!FindPaths()) {
-                tile.Content = contentFactory.Get(GameTileContentType.Empty);
-                FindPaths();
-            }
-        }
-    }
-    
-    public void ToggleSpawnPoint (GameTile tile) {
-        if (tile.Content.Type == GameTileContentType.SpawnPoint) {
-            if (spawnPoints.Count > 1) {
-                spawnPoints.Remove(tile);
-                tile.Content = contentFactory.Get(GameTileContentType.Empty);
-            }
-        }
-        else if (tile.Content.Type == GameTileContentType.Empty) {
-            tile.Content = contentFactory.Get(GameTileContentType.SpawnPoint);
-            spawnPoints.Add(tile);
-        }
-    }
-    
-    public void ToggleTower (GameTile tile, TowerType towerType) {
-        if (tile.Content.Type == GameTileContentType.Tower) {
-            updatingContent.Remove(tile.Content);
-            if (((Tower)tile.Content).TowerType == towerType) {
-                tile.Content = contentFactory.Get(GameTileContentType.Empty);
-                FindPaths();
-            }
-            else {
-                tile.Content = contentFactory.Get(towerType);
-                updatingContent.Add(tile.Content);
-            }
-        }
-        else if (tile.Content.Type == GameTileContentType.Empty) {
-            tile.Content = contentFactory.Get(towerType);
-            if (FindPaths()) {
-                updatingContent.Add(tile.Content);
-            }
-            else {
-                tile.Content = contentFactory.Get(GameTileContentType.Empty);
-                FindPaths();
-            }
-        }
-        else if (tile.Content.Type == GameTileContentType.Wall) {
-            tile.Content = contentFactory.Get(towerType);
-            updatingContent.Add(tile.Content);
-        }
-    }
-    
-    public void BuildTower (GameTile tile, TowerType towerType) {
-        if (tile.Content.Type == GameTileContentType.Empty) {
-            tile.Content = contentFactory.Get(towerType);
-            if (FindPaths()) {
-                updatingContent.Add(tile.Content);
-            }
-            else {
-                tile.Content = contentFactory.Get(GameTileContentType.Empty);
-                FindPaths();
-            }
-        }
-    }
-    
-    public void BuildWall (GameTile tile) {
-        if (tile.Content.Type == GameTileContentType.Empty) {
-            tile.Content = contentFactory.Get(GameTileContentType.Wall);
-            if (!FindPaths()) {
+            if (!FindPaths())
+            {
                 tile.Content = contentFactory.Get(GameTileContentType.Empty);
                 FindPaths();
             }
         }
     }
 
-    public void Trash(GameTile tile)
+    public void ToggleSpawnPoint(GameTile tile)
     {
-        if (tile.Content.Type == GameTileContentType.Tower) {
+        if (tile.Content.Type == GameTileContentType.SpawnPoint)
+        {
+            if (spawnPoints.Count > 1)
+            {
+                spawnPoints.Remove(tile);
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+            }
+        }
+        else if (tile.Content.Type == GameTileContentType.Empty)
+        {
+            tile.Content = contentFactory.Get(GameTileContentType.SpawnPoint);
+            spawnPoints.Add(tile);
+        }
+    }
+
+    public void ToggleTower(GameTile tile, TowerType towerType)
+    {
+        if (tile.Content.Type == GameTileContentType.Tower)
+        {
+            updatingContent.Remove(tile.Content);
+            if (((Tower) tile.Content).TowerType == towerType)
+            {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+            else
+            {
+                tile.Content = contentFactory.Get(towerType);
+                updatingContent.Add(tile.Content);
+            }
+        }
+        else if (tile.Content.Type == GameTileContentType.Empty)
+        {
+            tile.Content = contentFactory.Get(towerType);
+            if (FindPaths())
+            {
+                updatingContent.Add(tile.Content);
+            }
+            else
+            {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+        }
+        else if (tile.Content.Type == GameTileContentType.Wall)
+        {
+            tile.Content = contentFactory.Get(towerType);
+            updatingContent.Add(tile.Content);
+        }
+    }
+
+    public GameTileContent BuildTower(GameTile tile, TowerType towerType, Player player)
+    {
+        if (tile.Content.Type == GameTileContentType.Empty)
+        {
+            var gameTileContent = contentFactory.Get(towerType);
+            tile.Content = gameTileContent;
+            if (gameTileContent.CanBuild(player) && FindPaths())
+            {
+                gameTileContent.Build(player);
+                updatingContent.Add(tile.Content);
+            }
+            else
+            {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+        }
+        return tile.Content;
+    }
+
+    public void BuildWall(GameTile tile)
+    {
+        if (tile.Content.Type == GameTileContentType.Empty)
+        {
+            tile.Content = contentFactory.Get(GameTileContentType.Wall);
+            if (!FindPaths())
+            {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+        }
+    }
+
+    public GameTileContent Trash(GameTile tile, Player player)
+    {
+        var trashed = tile.Content;
+        if (tile.Content.Type == GameTileContentType.Tower)
+        {
             updatingContent.Remove(tile.Content);
         }
+
         tile.Content = contentFactory.Get(GameTileContentType.Empty);
         FindPaths();
+        trashed.Trash(player);
+        return trashed;
     }
 }

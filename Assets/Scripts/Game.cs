@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -60,6 +61,8 @@ public class Game : MonoBehaviour
         board.ShowGrid = true;
         activeScenario = scenario.Begin();
         player.health = scenario.StartingPlayerHealth;
+        player.power = scenario.StartingPlayerPower;
+        player.maxPower = scenario.StartingPlayerPower;
     }
 
     void OnValidate()
@@ -182,6 +185,8 @@ public class Game : MonoBehaviour
     public void BeginNewGame()
     {
         player.health = scenario.StartingPlayerHealth;
+        player.power = scenario.StartingPlayerPower;
+        player.maxPower = scenario.StartingPlayerPower;
         enemies.Clear();
         nonEnemies.Clear();
         board.Clear();
@@ -223,18 +228,20 @@ public class Game : MonoBehaviour
             switch (selectedTool)
             {
                 case Tool.Laser:
-                    board.BuildTower(tile, TowerType.Laser);
+                    board.BuildTower(tile, TowerType.Laser, player);
                     break;
                 case Tool.Mortar:
-                    board.BuildTower(tile, TowerType.Mortar);
+                    board.BuildTower(tile, TowerType.Mortar, player);
                     break;       
                 case Tool.Wall:
                     board.BuildWall(tile);
                     break;      
                 case Tool.Trash:
-                    board.Trash(tile);
-                    break;       
+                    board.Trash(tile, player);
+                    break;
             }
         }
+
+        Debug.Log(player.power);
     }
 }

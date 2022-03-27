@@ -65,7 +65,7 @@
     border-right-width: 0;
     border-top-width: 0;
     border-bottom-width: 0;
-    padding: 0px;
+    padding: 0;
     margin: 0;
     border-radius: 20px;
 }
@@ -80,7 +80,7 @@
 
 .heart {
     -unity-background-image-tint-color: rgb(255, 0, 0);
-    background-image: url("/Assets/Materials/hearts.png");
+    background-image: url('/Assets/Materials/hearts.png');
     width: 80px;
     height: 80px;
     margin-left: 0;
@@ -98,7 +98,58 @@
     border-bottom-width: 0;
 }
 
+.power-icon {
+    width: 80px;
+    height: 80px;
+    background-image: url('/Assets/Materials/power-lightning.png');
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    margin-right: 10px;
+}
+
+.power-icon.error {
+    -unity-background-image-tint-color: rgb(232, 26, 26);
+}
+
+.power-icon.warning {
+    -unity-background-image-tint-color: rgb(255, 237, 73);
+}
+
+.power-icon.info {
+    -unity-background-image-tint-color: rgb(71, 232, 26);
+}
+
+.power {
+    width: 400px;
+    height: 80px;
+    background-color: rgb(26, 115, 232);
+}
+
+.level {
+    width: 50%;
+    height: 80px;
+}
+
+.level.error {
+    background-color: rgb(232, 26, 26);
+}
+
+.level.warning {
+    background-color: rgb(255, 237, 73);
+}
+
+.level.info {
+    background-color: rgb(71, 232, 26);
+}
+
 .wrapper {
     padding: 20px;
     height: 120px;
+}
+
+.info-panel {
+    position: absolute;
+    height: 120px;
+    width: 100%;
+    flex-direction: row;
 }

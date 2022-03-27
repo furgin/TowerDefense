@@ -12,6 +12,7 @@ public class GameScenario : ScriptableObject
     [SerializeField] EnemyWave[] waves = { };
 
     [SerializeField] public int StartingPlayerHealth = 10;
+    [SerializeField] public int StartingPlayerPower = 5;
 
     public State Begin() => new State(this);
     
