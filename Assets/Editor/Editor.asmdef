@@ -2,7 +2,8 @@
     "name": "Editor",
     "rootNamespace": "",
     "references": [
-        "Scripts"
+        "Scripts",
+        "UnityEditor.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
