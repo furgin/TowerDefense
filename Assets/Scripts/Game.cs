@@ -61,6 +61,7 @@ public class Game : MonoBehaviour
         board.ShowGrid = true;
         activeScenario = scenario.Begin();
         player.health = scenario.StartingPlayerHealth;
+        player.maxHealth = scenario.StartingPlayerHealth;
         player.power = scenario.StartingPlayerPower;
         player.maxPower = scenario.StartingPlayerPower;
     }
@@ -185,6 +186,7 @@ public class Game : MonoBehaviour
     public void BeginNewGame()
     {
         player.health = scenario.StartingPlayerHealth;
+        player.maxHealth = scenario.StartingPlayerHealth;
         player.power = scenario.StartingPlayerPower;
         player.maxPower = scenario.StartingPlayerPower;
         enemies.Clear();

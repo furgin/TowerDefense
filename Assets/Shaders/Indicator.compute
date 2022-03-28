@@ -1,0 +1,36 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+Texture2D<float4> _Original;
+uint _Level;
+float4 _FillColor;
+float4 _BackgroundColor;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // if(_Original[id.xy].a > 0 ||
+    // _Original[id.xy].r > 0 ||
+    // _Original[id.xy].g > 0 ||
+    // _Original[id.xy].b > 0
+    // )
+
+    float avg = (_Original[id.xy].r +_Original[id.xy].r +_Original[id.xy].r +_Original[id.xy].a)/4;
+
+    if(avg>0)
+    { 
+        if(id.y <= _Level)
+        {
+            Result[id.xy] = lerp(float4(0,0,0,0),_FillColor,avg);
+        } else
+        {
+            Result[id.xy] = lerp(float4(0,0,0,0),_BackgroundColor,avg);
+        }
+    } else
+    {
+        Result[id.xy] = float4(0,0,0,0);
+    }
+}

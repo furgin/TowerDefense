@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 using UnityEngine.UIElements;
 
 public enum Tool
@@ -11,11 +13,66 @@ public enum Tool
 
 public class GameController : MonoBehaviour
 {
-    public VisualTreeAsset heartReference;
+    private static Texture2D toTexture2D(RenderTexture renderTexture)
+    {
+        Texture2D tex = new Texture2D(
+            renderTexture.width,
+            renderTexture.height,
+            TextureFormat.RGBA32, false);
+        RenderTexture.active = renderTexture;
+        tex.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+        tex.Apply();
+        return tex;
+    }
+
+    public class Indicator
+    {
+        private RenderTexture renderTexture;
+        private Image indicator;
+        private Texture2D original;
+        private ComputeShader indicatorShader;
+        private Color fillColor;
+        private Color backgroundColor;
+
+        public Indicator(ComputeShader indicatorShader,
+            Color fillColor, Color backgroundColor,
+            Image indicator)
+        {
+            this.indicatorShader = indicatorShader;
+            this.fillColor = fillColor;
+            this.backgroundColor = backgroundColor;
+            this.indicator = indicator;
+            this.original = indicator.resolvedStyle.backgroundImage.texture;
+
+            renderTexture = new RenderTexture(512, 512, 32);
+            renderTexture.enableRandomWrite = true;
+            renderTexture.Create();
+        }
+
+        public void Update(float level, float max)
+        {
+            int val = (int) (level * 512f / max);
+            Debug.Log(val);
+            indicatorShader.SetInt("_Level", val);
+            indicatorShader.SetVector("_FillColor", fillColor);
+            indicatorShader.SetVector("_BackgroundColor", backgroundColor);
+            indicatorShader.SetTexture(0, "_Original", original);
+            indicatorShader.SetTexture(0, "Result", renderTexture);
+            indicatorShader.Dispatch(0, 1 + renderTexture.width / 8, 1 + renderTexture.height / 8, 1);
+
+            indicator.style.backgroundImage = new StyleBackground(toTexture2D(renderTexture));
+        }
+    }
+
+    [SerializeField] public ComputeShader indicatorShader = default;
+
+    [SerializeField] public Color powerFillColor, powerBackgroundColor = default;
+    [SerializeField] public Color healthFillColor, healthBackgroundColor = default;
 
     Button exitButton;
     private Button restartButton, powerIcon;
-    private VisualElement mortarTool, wallTool, trashTool, pauseScreen, hearts, laserTool, level;
+    private Indicator healthIndicator, powerIndicator;
+    private VisualElement mortarTool, wallTool, trashTool, pauseScreen, laserTool;
 
     [SerializeField] public Game game;
 
@@ -35,10 +92,14 @@ public class GameController : MonoBehaviour
         mortarTool = root.Q<VisualElement>("mortar-tool");
         wallTool = root.Q<VisualElement>("wall-tool");
         trashTool = root.Q<VisualElement>("trash-tool");
-        level = root.Q<VisualElement>("level");
-        powerIcon = root.Q<Button>("power-icon");
 
-        hearts = root.Q<VisualElement>("hearts");
+        healthIndicator = new Indicator(indicatorShader,
+            healthFillColor, healthBackgroundColor,
+            root.Q<Image>("health"));
+        powerIndicator = new Indicator(indicatorShader,
+            powerFillColor, powerBackgroundColor,
+            root.Q<Image>("power")
+        );
     }
 
     void ExitButtonPressed()
@@ -95,47 +156,7 @@ public class GameController : MonoBehaviour
 
     public void GameUpdate(Player player)
     {
-        var offset = player.health - hearts.childCount;
-        if (offset > 0)
-        {
-            for (int i = 0; i < offset; i++)
-            {
-                var newButton = new Button();
-                newButton.AddToClassList("heart");
-                hearts.Add(newButton);
-            }
-        }
-        else if (offset < 0)
-        {
-            for (int i = 0; i > offset; i--)
-            {
-                hearts.RemoveAt(0);
-            }
-        }
-
-        var perc = player.power * 100f / player.maxPower;
-        level.RemoveFromClassList("info");
-        level.RemoveFromClassList("warning");
-        level.RemoveFromClassList("error");
-        powerIcon.RemoveFromClassList("info");
-        powerIcon.RemoveFromClassList("warning");
-        powerIcon.RemoveFromClassList("error");
-        if (perc < 33)
-        {
-            level.AddToClassList("error");
-            powerIcon.AddToClassList("error");
-        }
-        else if (perc < 66)
-        {
-            level.AddToClassList("warning");
-            powerIcon.AddToClassList("warning");
-        }
-        else
-        {
-            level.AddToClassList("info");   
-            powerIcon.AddToClassList("info");   
-        }
-
-        level.style.width = new Length(perc, LengthUnit.Percent);
+        powerIndicator.Update(player.power, player.maxPower);
+        healthIndicator.Update(player.health, player.maxHealth);
     }
 }
