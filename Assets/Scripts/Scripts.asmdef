@@ -1,0 +1,18 @@
+{
+    "name": "Scripts",
+    "rootNamespace": "",
+    "references": [
+        "UnityEngine.UIElementsModule",
+        "Cinemachine",
+        "com.unity.cinemachine.editor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
