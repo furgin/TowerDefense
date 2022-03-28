@@ -7,8 +7,6 @@ public class Game : MonoBehaviour
 {
     [SerializeField] WarFactory warFactory = default;
 
-    [SerializeField] Vector2Int boardSize = new Vector2Int(11, 11);
-
     [SerializeField] GameBoard board = default;
 
     [SerializeField] GameTileContentFactory tileContentFactory = default;
@@ -56,7 +54,7 @@ public class Game : MonoBehaviour
     void Awake()
     {
         player = new Player();
-        board.Initialize(boardSize, tileContentFactory);
+        board.Initialize(scenario.BoardSize, tileContentFactory);
         board.ShowPaths = false;
         board.ShowGrid = true;
         activeScenario = scenario.Begin();
@@ -64,19 +62,6 @@ public class Game : MonoBehaviour
         player.maxHealth = scenario.StartingPlayerHealth;
         player.power = scenario.StartingPlayerPower;
         player.maxPower = scenario.StartingPlayerPower;
-    }
-
-    void OnValidate()
-    {
-        if (boardSize.x < 2)
-        {
-            boardSize.x = 2;
-        }
-
-        if (boardSize.y < 2)
-        {
-            boardSize.y = 2;
-        }
     }
 
     int GetKeys(params KeyCode[] keys)
@@ -101,10 +86,6 @@ public class Game : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 HandleTouch();
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                HandleAlternativeTouch();
             }
 
             int key = GetKeys(

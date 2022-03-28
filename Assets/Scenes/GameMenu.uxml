@@ -1,36 +1,29 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
-         xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements"
-         noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="styles.uss"/>
-    <ui:VisualElement name="Toolbar"
-                      class="toolbar">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="styles.uss" />
+    <ui:VisualElement name="Toolbar" class="toolbar">
         <ui:VisualElement name="laser-tool" class="wrapper">
-            <ui:Button display-tooltip-when-elided="true" class="tool"
-                       style="background-image: url(&apos;/Assets/Materials/turret-selected.png&apos;);"/>
+            <ui:Button display-tooltip-when-elided="true" class="tool" style="background-image: url(&apos;/Assets/Materials/turret-selected.png&apos;);" />
         </ui:VisualElement>
         <ui:VisualElement name="mortar-tool" class="wrapper">
-            <ui:Button display-tooltip-when-elided="true" class="tool"
-                       style="background-image: url(&apos;/Assets/Materials/mortar-selected.png&apos;);"/>
+            <ui:Button display-tooltip-when-elided="true" class="tool" style="background-image: url(&apos;/Assets/Materials/mortar-selected.png&apos;);" />
         </ui:VisualElement>
         <ui:VisualElement name="wall-tool" class="wrapper">
-            <ui:Button display-tooltip-when-elided="true" class="tool"
-                       style="background-image: url(&apos;/Assets/Materials/defensive-wall.png&apos;);"/>
+            <ui:Button display-tooltip-when-elided="true" class="tool" style="background-image: url(&apos;/Assets/Materials/defensive-wall.png&apos;);" />
         </ui:VisualElement>
         <ui:VisualElement name="trash-tool" class="wrapper">
-            <ui:Button display-tooltip-when-elided="true" class="tool"
-                       style="background-image: url(&apos;/Assets/Materials/trash-can.png&apos;);"/>
+            <ui:Button display-tooltip-when-elided="true" class="tool" style="background-image: url(&apos;/Assets/Materials/trash-can.png&apos;);" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="Info" class="info">
-        <ui:Image name="health" class="player health" style="background-image: url('/Assets/Materials/hearts.png');"/>
-        <ui:Image name="power" class="player power" style="background-image: url('/Assets/Materials/power-lightning.png');"/>
+        <ui:Image name="health" class="player health" style="background-image: url(&apos;/Assets/Materials/hearts.png&apos;);" />
+        <ui:Image name="power" class="player power" style="background-image: url(&apos;/Assets/Materials/power-lightning.png&apos;);" />
     </ui:VisualElement>
     <ui:VisualElement name="pause-screen" class="screen">
         <ui:VisualElement name="pause-menu" class="menu">
-            <ui:Label text="Paused" class="header"/>
+            <ui:Label text="Paused" class="header" />
             <ui:VisualElement class="buttons">
-                <ui:Button text="Restart" name="restart-button" class="button"/>
-                <ui:Button text="Exit" name="exit-button" class="button"/>
+                <ui:Button text="Restart" name="restart-button" class="button" />
+                <ui:Button text="Exit" name="exit-button" class="button" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

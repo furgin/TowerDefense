@@ -92,29 +92,6 @@
     -unity-background-image-tint-color: rgb(71, 232, 26);
 }
 
-.bar {
-    width: 100px;
-    height: 50px;
-    background-color: rgb(26, 115, 232);
-}
-
-.bar .level {
-    width: 50%;
-    height: 80px;
-}
-
-.bar .level.error {
-    background-color: rgb(232, 26, 26);
-}
-
-.bar .level.warning {
-    background-color: rgb(255, 237, 73);
-}
-
-.bar .level.info {
-    background-color: rgb(71, 232, 26);
-}
-
 .info {
     height: 0;
     position: absolute;
@@ -123,8 +100,8 @@
 }
 
 .info .player {
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
     background-color: rgba(0, 0, 0, 0);
     position: absolute;
     border-width: 0;
@@ -145,6 +122,11 @@
 .toolbar {
     height: 80px;
     position: absolute;
+    bottom: 20px;
+    width: 100%;
+    align-content: center;
+    justify-content: center;
+    
     flex-direction: row;
     padding-left: 20px;
     padding-right: 20px;

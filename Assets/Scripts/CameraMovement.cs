@@ -16,10 +16,24 @@ public class CameraMovement : MonoBehaviour
     {
         var fwd = Camera.main.transform.forward;
         var dir = new Vector3(fwd.x, 0, fwd.z).normalized;
-
+        var right = new Vector3(dir.z, dir.y, -dir.x);
+        var left = -right;
+        
         if (Input.GetKey(KeyCode.W))
         {
             velocity += dir;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            velocity += left;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            velocity += right;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            velocity += -dir;
         }
         
         transform.localPosition += velocity * Speed * Time.deltaTime;

@@ -3,12 +3,19 @@ using UnityEngine;
 
 public class GameCameraController : MonoBehaviour
 {
+    private CinemachineFreeLook freeLook;
+    private float speed;
+
+    public void Awake()
+    {
+        this.freeLook = GetComponent<CinemachineFreeLook>();
+        this.speed = freeLook.m_XAxis.m_MaxSpeed;
+    }
     public void Update()
     {
-        var freeLook = GetComponent<CinemachineFreeLook>();
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetMouseButton(1))
         {
-            freeLook.m_XAxis.m_MaxSpeed = 500.0f;
+            freeLook.m_XAxis.m_MaxSpeed = speed;
         }
         else
         {
